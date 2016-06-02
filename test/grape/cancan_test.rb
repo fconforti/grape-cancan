@@ -3,26 +3,26 @@ require 'rack/test'
 require 'grape/cancan'
 require 'cancancan'
 
-User = Class.new
+Lockable = Class.new
 
 class Ability
   include CanCan::Ability
 
-  def initialize(user)
-    can :read, User
-    cannot :love, User
+  def initialize(lockable)
+    can :read, Lockable
+    cannot :love, Lockable
   end
 end
 
 class API < Grape::API
   authorize_routes!
-  helpers { define_method(:current_user) { User.new } }
-  get('/can') { can? :love, current_user }
-  get('/cannot') { cannot? :read, current_user }
-  get('/authorize_option', authorize: [:read, User])
-  get('/authorize_option_fail', authorize: [:love, User])
-  get('/authorize_explicit') { authorize! :read, current_user }
-  get('/authorize_explicit_fail') { authorize! :love, current_user }
+  helpers { define_method(:current_lockable) { Lockable.new } }
+  get('/can') { can? :love, current_lockable }
+  get('/cannot') { cannot? :read, current_lockable }
+  get('/authorize_option', authorize: [:read, Lockable])
+  get('/authorize_option_fail', authorize: [:love, Lockable])
+  get('/authorize_explicit') { authorize! :read, current_lockable }
+  get('/authorize_explicit_fail') { authorize! :love, current_lockable }
 end
 
 class GrapeCancanTest < Minitest::Test
