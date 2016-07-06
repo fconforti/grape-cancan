@@ -15,7 +15,7 @@ module Grape
     module Endpoint
       # Returns an instance of the CanCan ability
       def current_ability
-        @current_ability ||= ::Ability.new(current_lockable)
+        @current_ability ||= ::Ability.new(current_consumer)
       end
       delegate :can?, :cannot?, :authorize!, to: :current_ability
 

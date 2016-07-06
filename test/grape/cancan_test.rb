@@ -16,13 +16,13 @@ end
 
 class API < Grape::API
   authorize_routes!
-  helpers { define_method(:current_lockable) { Lockable.new } }
-  get('/can') { can? :love, current_lockable }
-  get('/cannot') { cannot? :read, current_lockable }
+  helpers { define_method(:current_consumer) { Lockable.new } }
+  get('/can') { can? :love, current_consumer }
+  get('/cannot') { cannot? :read, current_consumer }
   get('/authorize_option', authorize: [:read, Lockable])
   get('/authorize_option_fail', authorize: [:love, Lockable])
-  get('/authorize_explicit') { authorize! :read, current_lockable }
-  get('/authorize_explicit_fail') { authorize! :love, current_lockable }
+  get('/authorize_explicit') { authorize! :read, current_consumer }
+  get('/authorize_explicit_fail') { authorize! :love, current_consumer }
 end
 
 class GrapeCancanTest < Minitest::Test
